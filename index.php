@@ -7,19 +7,52 @@ $uri = $_SERVER["REQUEST_URI"];
 
 $path = parse_url($uri)['path'];
 
-if($path == "/cars"){
+switch($path){
+    case "/cars":
+        $response = CarsController::getCars();
 
-    $response = CarsController::getCars();
+        http_response_code($response['statusCode']);
+        echo json_encode($response);
+        break;
 
-    http_response_code($response['statusCode']);
-    echo json_encode($response);
+    case "/buyCar":
+        $response = CarsController::buyCar();
 
-}else{
-    $response = [
-        'status' => 'error',
-        'statusCode' => 404,
-        'messsage' => 'This endpoint does not exist'
-    ];
-    http_response_code($response['statusCode']);
-    echo json_encode($response);
+        http_response_code($response['statusCode']);
+        echo json_encode($response);
+        break;  
+
+    default:
+        $response = CarsController::getCars();
+
+        http_response_code($response['statusCode']);
+        echo json_encode($response);
+
+        $response = [
+            'status' => 'error',
+            'statusCode' => 404,
+            'messsage' => 'This endpoint does not exist'
+        ];
+        http_response_code($response['statusCode']);
+        echo json_encode($response);
+        break;  
 }
+
+
+
+// if($path == "/cars"){
+
+//     $response = CarsController::getCars();
+
+//     http_response_code($response['statusCode']);
+//     echo json_encode($response);
+
+// }else{
+//     $response = [
+//         'status' => 'error',
+//         'statusCode' => 404,
+//         'messsage' => 'This endpoint does not exist'
+//     ];
+//     http_response_code($response['statusCode']);
+//     echo json_encode($response);
+// }

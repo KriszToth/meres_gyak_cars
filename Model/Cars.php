@@ -33,11 +33,12 @@ class Cars{
 
 	public function setKilometerallas( $kilometerallas): void {$this->kilometerallas = $kilometerallas;}
 
-	static function getCars($brand, $type){
+	static function getCars($brand, $type)
+    {
   
 
         try{
-                $mysqli = new mysqli();
+            $mysqli = new mysqli();
             $mysqli->connect("localhost","root","root","autoadatbazis"); 
             
             $sql = "SELECT * FROM `autok` WHERE marka LIKE '%$brand%' AND modell LIKE '%$type%';";
@@ -49,5 +50,34 @@ class Cars{
             var_dump($e->getMessage());
         }
         
+    }
+
+    static function buyCar($userId, $carId){
+        try{
+            $mysqli = new mysqli();
+            $mysqli->connect("localhost","root","root","autoadatbazis"); 
+
+            $sql = "UPDATE autok SET user_id = $userId WHERE autok.id = $carId;";
+            $resultObject = $mysqli->query($sql);
+            if($resultObject){
+                return [
+                    "status" => true,
+                    "message" => "siker"
+                ];
+            }
+            else{
+                return [
+                    "status" => false,
+                    "message" => "nem siker"
+                ];
+            }
+            var_dump($resultObject);
+
+        }catch(Exception $e){
+            return [
+                "status" => false,
+                "message" => $e->getMessage()
+            ];
+        }
     }
 }
