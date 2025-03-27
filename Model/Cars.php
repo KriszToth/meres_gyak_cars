@@ -80,4 +80,42 @@ class Cars{
             ];
         }
     }
+
+    static function addNewCar($marka, $modell, $ev, $ar, $kilometerallas) {
+        try {
+            $mysqli = new mysqli("localhost", "root", "root", "autoadatbazis");
+            
+            // Check connection
+            if ($mysqli->connect_error) {
+                throw new Exception("Connection failed: " . $mysqli->connect_error);
+            }
+    
+            // Escape variables to prevent SQL injection
+            $marka = $mysqli->real_escape_string($marka);
+            $modell = $mysqli->real_escape_string($modell);
+            $ev = $mysqli->real_escape_string($ev);
+            $ar = $mysqli->real_escape_string($ar);
+            $kilometerallas = $mysqli->real_escape_string($kilometerallas);
+    
+            $sql = "INSERT INTO autok (marka, modell, ev, ar, kilometerallas) 
+                    VALUES ('$marka', '$modell', '$ev', $ar, $kilometerallas)";
+    
+            if ($mysqli->query($sql)) {
+                return [
+                    'status' => true,
+                    'message' => 'Car added successfully',
+                    'insertId' => $mysqli->insert_id
+                ];
+            } else {
+                throw new Exception("Error: " . $mysqli->error);
+            }
+        } catch (Exception $e) {
+            return [
+                'status' => false,
+                'message' => $e->getMessage()
+            ];
+        } finally {
+            $mysqli->close();
+        }
+    }
 }

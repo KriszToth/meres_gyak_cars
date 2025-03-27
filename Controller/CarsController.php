@@ -55,5 +55,41 @@ class CarsController{
         }
         return $response;
 }
+
+static function addCar() {
+    // Retrieve POST data
+    $marka = $_POST['marka'] ?? '';
+    $modell = $_POST['modell'] ?? '';
+    $ev = $_POST['ev'] ?? '';
+    $ar = $_POST['ar'] ?? '';
+    $kilometerallas = $_POST['kilometerallas'] ?? '';
+
+    // Validate required fields
+    // if (empty($marka) || empty($modell) || empty($ev) || empty($ar) || empty($kilometerallas)) {
+    //     return [
+    //         'status' => 'error',
+    //         'statusCode' => 400,
+    //         'message' => 'All fields (marka, modell, ev, ar, kilometerallas) are required.'
+    //     ];
+    // }
+
+    // Add the car via the model
+    $result = Cars::addNewCar($marka, $modell, $ev, $ar, $kilometerallas);
+
+    if ($result['status']) {
+        return [
+            'status' => 'success',
+            'statusCode' => 201,
+            'message' => $result['message'],
+            'body' => ['insertId' => $result['insertId']]
+        ];
+    } else {
+        return [
+            'status' => 'error',
+            'statusCode' => 500,
+            'message' => $result['message']
+        ];
+    }
+}
 }
 

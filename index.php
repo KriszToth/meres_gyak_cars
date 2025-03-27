@@ -36,6 +36,12 @@ switch($path){
         http_response_code($response['statusCode']);
         echo json_encode($response);
         break;  
+
+    case "/addCar":
+            $response = CarsController::addCar();
+            http_response_code($response['statusCode']);
+            echo json_encode($response);
+            break;
 }
 
 
